@@ -147,8 +147,95 @@ class App():
             tkr.Entry(frame, width=34, bg="white", textvariable=month).grid (row=4, column=1)
             tkr.Entry(frame, width=34, bg="white", textvariable=month).grid (row=5, column=1) 
             
-            #TODO: build Code here
+class FlightHourCalculator:
+    def __init__(self):
+        
+        window = Tk()
+        window.geometry('800x350')
+        window.configure(bg='blue')
+        window.title("Flight Hour Calculator")
 
+        photo = PhotoImage(file=r'') 
+        Label(window, image=photo).grid(row = 1, column = 1, sticky = W)  
+        
+        Label(window, text = "Pilot ID", bg='blue', fg='white', font='Courier 25 bold').grid(row = 2, column = 1, sticky = W)
+        Label(window, text = "Time In (Hour)", bg='blue', fg='white', font='Courier 25 bold').grid(row = 3, column = 1, sticky = W)
+        Label(window, text = "Time In (Minute)", bg='blue', fg='white', font='Courier 25 bold').grid(row = 4, column = 1, sticky = W)
+        Label(window, text = "Time Out (Hour)", bg='blue', fg='white', font='Courier 25 bold').grid(row = 5, column = 1, sticky = W)
+        Label(window, text = "Time Out (Minute)", bg='blue', fg='white', font='Courier 25 bold').grid(row = 6, column = 1, sticky = W)
+        Label(window, text = "Total Hours", bg='blue', fg='white', font='Courier 25 bold').grid(row = 7, column = 1, sticky = W)
+        Label(window, text = "Total Minute", bg='blue', fg='white', font='Courier 25 bold').grid(row = 8, column = 1, sticky = W)
+
+        self.time_inHVar = StringVar()
+        Entry(window, textvariable = self.time_inHVar, justify = RIGHT).grid(row = 3, column = 2)
+        self.time_inMVar = StringVar()
+        Entry(window, textvariable = self.time_inMVar, justify = RIGHT).grid(row = 4, column = 2)
+        self.time_outHVar = StringVar()
+        Entry(window, textvariable = self.time_outHVar, justify = RIGHT).grid(row = 5, column = 2)
+        self.time_outMVar = StringVar()
+        Entry(window, textvariable = self.time_outMVar, justify = RIGHT).grid(row = 6, column = 2)
+        self.total_hoursVar = StringVar()
+        Label(window, textvariable = self.total_hoursVar).grid(row = 7, column = 2, sticky = E)
+        self.total_minVar = StringVar()
+        Label(window, textvariable = self.total_minVar).grid(row = 8, column = 2, sticky = E)
+        Entry(window, justify = RIGHT).grid(row = 2, column = 4)
+        
+        
+        Label(window, text = "Total Hours", bg='blue', fg='white', font='Courier 25 bold').grid(row = 2, column = 3, sticky = W)
+        Label(window, text = "Domestic Hours", bg='blue', fg='white', font='Courier 25 bold').grid(row = 3, column = 3, sticky = W)
+        Label(window, text = "International Hours", bg='blue', fg='white', font='Courier 25 bold').grid(row = 4, column = 3, sticky = W)
+        Label(window, text = "Total Wage", bg='blue', fg='white', font='Courier 25 bold').grid(row = 5, column = 3, sticky = W)
+        Entry(window, justify = RIGHT).grid(row = 2, column = 2)
+
+        self.total_hours2Var = StringVar()
+        Entry(window, textvariable = self.total_hours2Var, justify = RIGHT).grid(row = 2, column = 4)
+        self.domestic_hoursVar = StringVar()
+        Entry(window, textvariable = self.domestic_hoursVar, justify = RIGHT).grid(row = 3, column = 4)
+        self.international_hoursVar = StringVar()
+        Entry(window, textvariable = self.international_hoursVar, justify = RIGHT).grid(row = 4, column = 4)
+        self.total_wageVar = StringVar()
+        Label(window, textvariable = self.total_wageVar).grid(row = 5, column = 4, sticky = E)
+        Button(window, text = "Compute Total Hours", command = self.computetotalhours).grid(row = 9, column = 2, sticky = E)
+        Button(window, text = "Compute Total Wage", command = self.computewage).grid(row = 6, column = 4, sticky = E)
+
+        window.mainloop() # Create an event loop
+    def getflighthours(self,time_out, time_in):
+        Total_hours = time_out - time_in 
+        return Total_hours
+
+    def getflightmin(self,min_in,min_out):
+        Total_min = min_out - min_in
+        return Total_min
+  
+    def computetotalhours(self):
+        Total_hours = self.getflighthours(
+            int(self.time_outHVar.get()),  
+            int(self.time_inHVar.get()))
+        
+        Total_min = self.getflightmin(
+            int(self.time_inMVar.get()),
+            int(self.time_outMVar.get())
+        )
+    
+        self.total_hoursVar.set(format(Total_hours))
+        self.total_minVar.set(format(Total_min, ".1f"))
+
+    def getwage(self, domestic, international):
+        total_wage = domestic + international 
+        print({total_wage})
+        return total_wage
+
+    def computewage(self):
+        total_wage = self.getwage(
+            float(self.domestic_hoursVar.get()) *43,
+            float(self.international_hoursVar.get())*56)
+
+        self.total_wageVar.set(format(total_wage, "10.2f"))
+
+        
+    
+
+FlightHourCalculator()  # Create GUI 
 
         # button widget
         tkr.Button(main_frame, text="Go Back", fg='black', bg='blue', highlightbackground='orange',
